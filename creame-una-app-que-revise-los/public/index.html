@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gasolineras de diesel en Espana</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Comparador real de repostaje</p>
+          <h1>Gasolineras de diesel en toda Espana</h1>
+          <p class="subtitle">
+            Selecciona tu ubicacion en el mapa y compara la mas barata con la que de verdad
+            compensa mas cuando sumas el coste de ir hasta ella.
+          </p>
+        </div>
+        <div class="topbar-meta">
+          <div class="meta-chip">
+            <span class="meta-label">Ubicacion elegida</span>
+            <strong id="origin-label">Espinardo</strong>
+          </div>
+          <div class="meta-chip">
+            <span class="meta-label">Dataset</span>
+            <strong id="updated-at">Pendiente</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="controls-panel" aria-labelledby="controls-title">
+          <div class="section-head">
+            <h2 id="controls-title">Ajustes</h2>
+            <button id="refresh-button" class="ghost-button" type="button">Recargar datos</button>
+          </div>
+
+          <form id="settings-form" class="controls-grid">
+            <label>
+              <span>Tipo de diesel</span>
+              <select id="product-select" name="productId"></select>
+            </label>
+
+            <label>
+              <span>Litros que quieres echar</span>
+              <input id="liters-input" name="litersToBuy" type="number" min="5" step="1" />
+            </label>
+
+            <label>
+              <span>Consumo medio (L/100 km)</span>
+              <input
+                id="consumption-input"
+                name="consumptionLitersPer100Km"
+                type="number"
+                min="1"
+                step="0.1"
+              />
+            </label>
+
+            <label>
+              <span>Radio maximo por carretera</span>
+              <input id="radius-input" name="radiusKm" type="number" min="5" step="1" />
+            </label>
+
+            <label class="toggle-row">
+              <span>Contar ida y vuelta</span>
+              <input id="roundtrip-input" name="roundTrip" type="checkbox" />
+            </label>
+          </form>
+
+          <div class="assumptions">
+            <p id="source-indicator">Fuente pendiente.</p>
+            <p>
+              Haz clic en el mapa o arrastra el pin para fijar tu ubicacion. La comparacion usa
+              distancia real por carretera cuando el motor de rutas responde.
+            </p>
+            <p id="refresh-note">Refresco automatico pendiente.</p>
+          </div>
+        </section>
+
+        <section class="results-panel" aria-labelledby="results-title">
+          <div class="map-panel">
+            <div class="section-head">
+              <h2 id="results-title">Mapa</h2>
+              <button id="reset-map-button" class="ghost-button" type="button">Ver Espana</button>
+            </div>
+            <p class="map-copy">
+              El pin marca el punto de partida. Los marcadores muestran la mejor opcion real, la
+              mas barata y otras candidatas destacadas.
+            </p>
+            <div id="map" class="map-canvas" aria-label="Mapa para elegir la ubicacion"></div>
+          </div>
+
+          <div id="status-banner" class="status-banner" hidden></div>
+
+          <section class="summary-strip" aria-live="polite">
+            <article class="summary-card">
+              <p class="stat-label">Mejor opcion real</p>
+              <strong id="best-real-name">-</strong>
+              <p id="best-real-detail">-</p>
+            </article>
+            <article class="summary-card">
+              <p class="stat-label">Mas barata en surtidor</p>
+              <strong id="cheapest-name">-</strong>
+              <p id="cheapest-detail">-</p>
+            </article>
+            <article class="summary-card">
+              <p class="stat-label">Punto de equilibrio</p>
+              <strong id="breakeven-value">-</strong>
+              <p id="breakeven-detail">-</p>
+            </article>
+            <article class="summary-card">
+              <p class="stat-label">Motor de distancia</p>
+              <strong id="route-mode-value">-</strong>
+              <p id="route-mode-detail">-</p>
+            </article>
+          </section>
+
+          <section class="insight-band">
+            <p id="insight-text">
+              Esperando datos para calcular que gasolinera compensa mas desde tu ubicacion.
+            </p>
+          </section>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Gasolinera</th>
+                  <th>Precio</th>
+                  <th>Distancia</th>
+                  <th>Tiempo</th>
+                  <th>Combustible de viaje</th>
+                  <th>Coste total real</th>
+                  <th>Precio efectivo</th>
+                </tr>
+              </thead>
+              <tbody id="stations-body">
+                <tr>
+                  <td colspan="8" class="empty-row">Cargando dataset...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
